@@ -25,6 +25,7 @@ int sleep(int);
 int uptime(void);
 int getpinfo(struct pstat*);
 int settickets(int);
+int getfavnum(void); //my favorite number is 7, number defined in syscall.h
 
 // ulib.c
 int stat(char*, struct stat*);
