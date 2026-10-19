@@ -147,6 +147,7 @@ extern int sys_getpinfo(void);
 extern int sys_settickets(void);
 extern int sys_getfavnum(void);
 extern int sys_halt(void);
+extern int sys_countsyscalls(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -173,8 +174,12 @@ static int (*syscalls[])(void) = {
 [SYS_getpinfo]    sys_getpinfo,
 [SYS_settickets]    sys_settickets,
 [SYS_getfavnum]    sys_getfavnum, //my favorite number is 7, number defined in syscall.h
-[SYS_halt]    sys_halt
+[SYS_halt]    sys_halt,
+[SYS_countsyscalls]    sys_countsyscalls,
 };
+
+static uint count[NELEM(syscalls)]; //NELEM is a macro that returns the number of elements in an array
+
 
 void
 syscall(void)
@@ -183,6 +188,7 @@ syscall(void)
 
   num = proc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    count[num]++; // increment the count for this system call, before calling the actual system call handler to catch exit() and fork() as well
     proc->tf->eax = syscalls[num]();
   } else {
     cprintf("%d %s: unknown sys call %d\n",
@@ -193,4 +199,13 @@ syscall(void)
 
 int sys_settickets(void) {
     return -1;
+}
+
+int
+get_syscall_count(int syscall_num) {
+    if (syscall_num < 0 || syscall_num >= NELEM(syscalls) || !syscalls[syscall_num]) {
+        return -1; // Invalid syscall number
+    }
+    //ignoring race conditions for simplicity
+    return count[syscall_num];
 }

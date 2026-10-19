@@ -150,6 +150,7 @@ int             arguintp(int, uintp*);
 int             fetchuintp(uintp, uintp*);
 int             fetchstr(uintp, char**);
 void            syscall(void);
+int             get_syscall_count(int syscall_num);
 
 // timer.c
 void            timerinit(void);

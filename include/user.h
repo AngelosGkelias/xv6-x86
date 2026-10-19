@@ -27,6 +27,7 @@ int getpinfo(struct pstat*);
 int settickets(int);
 int getfavnum(void);
 int halt(void);
+int countsyscalls(int syscall_num);
 
 
 // ulib.c
