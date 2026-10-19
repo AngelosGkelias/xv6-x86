@@ -182,6 +182,7 @@ USER_PROGS=\
 	zombie\
 	lotteryschedtest\
 	my_program\
+	shutdown\
 
 UPROGS := $(addprefix fs/,$(USER_PROGS))
 

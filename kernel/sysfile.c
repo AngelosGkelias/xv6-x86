@@ -13,6 +13,8 @@
 #include "fs.h"
 #include "file.h"
 #include "fcntl.h"
+#include "x86.h"
+
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -421,5 +423,12 @@ sys_pipe(void)
   }
   fd[0] = fd0;
   fd[1] = fd1;
+  return 0;
+}
+
+int
+sys_halt(void)
+{
+  outw(0x604, 0x2000);
   return 0;
 }
