@@ -34,4 +34,4 @@ SYSCALL(settickets)
 SYSCALL(getfavnum)
 SYSCALL(halt)
 SYSCALL(countsyscalls)
-
+SYSCALL(killrandom)

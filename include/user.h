@@ -28,6 +28,7 @@ int settickets(int);
 int getfavnum(void);
 int halt(void);
 int countsyscalls(int syscall_num);
+int killrandom(void);
 
 
 // ulib.c

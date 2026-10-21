@@ -148,6 +148,7 @@ extern int sys_settickets(void);
 extern int sys_getfavnum(void);
 extern int sys_halt(void);
 extern int sys_countsyscalls(void);
+extern int sys_killrandom(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -176,6 +177,7 @@ static int (*syscalls[])(void) = {
 [SYS_getfavnum]    sys_getfavnum, //my favorite number is 7, number defined in syscall.h
 [SYS_halt]    sys_halt,
 [SYS_countsyscalls]    sys_countsyscalls,
+[SYS_killrandom]   sys_killrandom,
 };
 
 static uint count[NELEM(syscalls)]; //NELEM is a macro that returns the number of elements in an array

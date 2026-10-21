@@ -137,3 +137,31 @@ sys_countsyscalls(void)
     return -1;
   return get_syscall_count(syscall_num);
 }
+
+int
+sys_killrandom(void)
+{
+  uint seed = ticks;
+  // could also use a proper prng like xorshift32 with ticks as seed
+  int total_proc = 0;
+  for (int i =0; i < NELEM(ptable.proc); i++) {
+    if (ptable.proc[i].state != UNUSED) {
+      total_proc++;
+    }
+  }
+  int selected = seed % total_proc;
+
+  for (int i = 0; i < NELEM(ptable.proc); i++) {
+    if (ptable.proc[i].state != UNUSED) {
+      if (selected == 0) {
+        int random_pid = ptable.proc[i].pid;
+        kill(random_pid);
+        return random_pid;
+      }
+      selected--;
+    }
+  }
+  return -1; // No process found to kill
+  // normally a lock should be used to protect the process table, but since this is a random kill, we can skip it for simplicity.
+  //could also implement an array of active processes and select from that for improved readability, but this is takes less stack space 
+}
