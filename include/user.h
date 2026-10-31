@@ -26,8 +26,8 @@ int uptime(void);
 int getpinfo(struct pstat*);
 int settickets(int);
 int getfavnum(void);
-int halt(void);
-int countsyscalls(int syscall_num);
+void halt(void);
+int getcount(int syscall);
 int killrandom(void);
 
 

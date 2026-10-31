@@ -147,7 +147,7 @@ extern int sys_getpinfo(void);
 extern int sys_settickets(void);
 extern int sys_getfavnum(void);
 extern int sys_halt(void);
-extern int sys_countsyscalls(void);
+extern int sys_getcount(void);
 extern int sys_killrandom(void);
 
 static int (*syscalls[])(void) = {
@@ -176,7 +176,7 @@ static int (*syscalls[])(void) = {
 [SYS_settickets]    sys_settickets,
 [SYS_getfavnum]    sys_getfavnum, //my favorite number is 7, number defined in syscall.h
 [SYS_halt]    sys_halt,
-[SYS_countsyscalls]    sys_countsyscalls,
+[SYS_getcount]    sys_getcount,
 [SYS_killrandom]   sys_killrandom,
 };
 

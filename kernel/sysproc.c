@@ -130,7 +130,7 @@ sys_getfavnum(void)
 
 
 int
-sys_countsyscalls(void)
+sys_getcount(void)
 {
   int syscall_num;
   if(argint(0, &syscall_num) < 0) //argint reads proc->tf->rdi in memory
