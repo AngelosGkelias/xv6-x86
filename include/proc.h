@@ -95,7 +95,7 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   int inuse;// If it's being run by a CPU or not
-  int ticks;// How many ticks has accumulated
+  int ticks;// How many ticks it has accumulated
   int tickets;                 // Number of tickets this process has (for lottery scheduling)
 };
 

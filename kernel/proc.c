@@ -6,6 +6,10 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "random.h"
+#include "pstat.h"
+#include "random.h"
+
 
 struct ptable ptable;
 
@@ -260,18 +264,15 @@ void
 scheduler(void)
 {
   struct proc *p = 0;
-
+  random_seed(); // Seed the random number generator
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
-    // no runnable processes? (did we hit the end of the table last time?)
-    // if so, wait for irq before trying again.
-    if (p == &ptable.proc[NPROC])
-      hlt();
-
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    /*
+    
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
@@ -291,8 +292,47 @@ scheduler(void)
       // It should have changed its p->state before coming back.
       proc = 0;
     }
-    release(&ptable.lock);
+    
+    */
+    
+    // Implementing lottery scheduling algorithm based on the Walspurger and Weihl paper without the decreasing ticket count ordering
 
+    uint32 total_tickets = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state == RUNNABLE)
+        total_tickets += p->tickets;
+    }
+
+    if (total_tickets == 0) {
+      release(&ptable.lock);
+      hlt();
+      continue;
+    }
+    else {
+      uint32 winning_ticket = random_next() % total_tickets;
+      uint32 current_ticket = 0;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+        current_ticket += p->tickets;
+        if(current_ticket > winning_ticket){
+          proc = p;
+          switchuvm(p);
+          p->state = RUNNING;
+          p->inuse = 1;
+
+          swtch(&cpu->scheduler, proc->context);
+
+          switchkvm();
+          // Process is done running for now.
+          // It should have changed its p->state before coming back.
+          proc = 0;
+          break;
+        }
+      }
+    }
+
+    release(&ptable.lock);
   }
 }
 
