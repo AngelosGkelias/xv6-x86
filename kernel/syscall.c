@@ -199,9 +199,7 @@ syscall(void)
   }
 }
 
-int sys_settickets(void) {
-    return -1;
-}
+
 
 int
 get_syscall_count(int syscall_num) {

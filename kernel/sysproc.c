@@ -165,3 +165,18 @@ sys_killrandom(void)
   // normally a lock should be used to protect the process table, but since this is a random kill, we can skip it for simplicity.
   //could also implement an array of active processes and select from that for improved readability, but this is takes less stack space 
 }
+
+int sys_settickets(void) {
+  int tickets;
+  if(argint(0, &tickets) < 0) {
+      return -1; // Invalid argument
+  }
+  if(tickets <= 0) {
+      return -1; // Tickets must be positive
+  }
+  if(tickets > 0xffffffffu / NPROC) {
+      return -1; // Prevent overflow
+  }
+  proc->tickets = tickets;
+  return 0;
+}

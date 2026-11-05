@@ -102,7 +102,7 @@ userinit(void)
 
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
-
+  p->tickets = 10; // Assign a default number of tickets to the initial process
   p->state = RUNNABLE;
 }
 
@@ -149,6 +149,7 @@ fork(void)
   np->sz = proc->sz;
   np->parent = proc;
   *np->tf = *proc->tf;
+  np->tickets = proc->tickets; // Inherit the number of tickets from the parent process
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;

@@ -1,6 +1,6 @@
 -include local.mk
 
-X64 ?= yes
+X64 ?= no
 
 ifeq ("$(X64)","yes")
 BITS = 64
@@ -213,7 +213,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	then echo "-gdb tcp::$(GDBPORT)"; \
 	else echo "-s -p $(GDBPORT)"; fi)
 ifndef CPUS
-CPUS := 2
+CPUS := 1
 endif
 QEMUOPTS = -net none -hda xv6.img -hdb fs.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
 
